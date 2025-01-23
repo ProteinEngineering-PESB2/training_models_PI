@@ -1,5 +1,6 @@
-from sklearn.model_selection import train_test_split
-from PerformancesModels import *
+from predictive_models.PerformancesModels import *
+from utils.utilsLib import *
+
 from joblib import load, dump
 
 class PredictiveModel(object):
@@ -26,35 +27,35 @@ class PredictiveModel(object):
 
     def splitDataset(self):
 
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
+        self.X_train, self.X_test, self.y_train, self.y_test = applySplit(
             self.dataset, 
-            self.response,
-            test_size=self.test_size,
-            random_state=self.random_state)
-    
+            self.response, 
+            random_state=self.random_state, 
+            test_size=self.test_size)
+        
     def trainModel(self):
 
-        self.model.fit(self.X_train, self.X_test)
+        self.model.fit(self.X_train, self.y_train)
     
     def evalModel(
             self,
+            y_true,
+            y_pred,
             type_model="class",
-            averge=None,
-            normalized_cm=None):
+            averge="weighted",
+            normalized_cm="true"):
         
-        predictions_model = self.model.predict(self.X_test)
-
         if type_model == "class":
-            self.performances = calculateClassificationMetrics(
-                y_true=self.y_test, 
-                y_pred=predictions_model, 
+            return calculateClassificationMetrics(
+                y_true=y_true, 
+                y_pred=y_pred, 
                 averge=averge,
                 normalized_cm=normalized_cm
             )
         else:
-            self.performances = calculateRegressionMetrics(
-                y_true=self.y_test, 
-                y_pred=predictions_model
+            return calculateRegressionMetrics(
+                y_true=y_true, 
+                y_pred=y_pred
             )
 
     def exportModel(

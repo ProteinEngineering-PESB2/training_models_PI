@@ -9,7 +9,7 @@ from sklearn.neighbors import (KNeighborsClassifier, RadiusNeighborsClassifier)
 from sklearn.gaussian_process import GaussianProcessClassifier
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-from PredictiveModel import PredictiveModel
+from predictive_models.PredictiveModel import PredictiveModel
 
 class ClassificationModels(PredictiveModel):
 
@@ -97,5 +97,10 @@ class ClassificationModels(PredictiveModel):
             averge="weighted",
             normalized_cm="true"):
 
+        self.splitDataset()
         self.trainModel()
-        self.evalModel(averge=averge, normalized_cm=normalized_cm)
+        self.performances = self.evalModel(
+            y_true=self.y_test,
+            y_pred=self.makePredictionsWithModel(self.X_test),
+            averge=averge, 
+            normalized_cm=normalized_cm)
