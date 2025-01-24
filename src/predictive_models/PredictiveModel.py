@@ -2,6 +2,7 @@ from predictive_models.PerformancesModels import *
 from utils.utilsLib import *
 
 from joblib import load, dump
+from sklearn.model_selection import cross_validate, StratifiedKFold
 
 class PredictiveModel(object):
 
@@ -37,6 +38,12 @@ class PredictiveModel(object):
 
         self.model.fit(self.X_train, self.y_train)
     
+    def trainModelWithKFold(self, k=10):
+        pass
+
+    def trainModelWithStratified(self, k=10):
+        pass
+
     def evalModel(
             self,
             y_true,
