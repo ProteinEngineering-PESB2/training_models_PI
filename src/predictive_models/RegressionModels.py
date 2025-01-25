@@ -10,6 +10,7 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
 from predictive_models.PredictiveModel import PredictiveModel
+from utils.utilsLib import *
 
 class RegressionModels(PredictiveModel):
 
@@ -794,12 +795,42 @@ class RegressionModels(PredictiveModel):
             n_jobs=n_jobs)
     
     def processModel(
-            self):
+            self,
+            averge="weighted",
+            normalized_cm="true",
+            k=10,
+            kfold=False,
+            stratified=False):
+
+        scores = makeScoresForRegression()
 
         self.splitDataset()
-        self.trainModel()
-        self.performances = self.evalModel(
-            type_model="regx",
-            y_true=self.y_test,
-            y_pred=self.makePredictionsWithModel(self.X_test),
-)
+
+        if kfold == False and stratified == False:
+
+            self.trainModel()
+            self.performances = {
+                "validation_metrics":self.evalModel(
+                    type_model="regx",
+                    y_true=self.y_test,
+                    y_pred=self.makePredictionsWithModel(self.X_test),
+                )
+            }
+        else:
+            if kfold:
+                self.performances = {
+                    "training_metrics" :  self.trainModelWithKFold(scores=scores, k=k, preffix="test_")
+                }
+            else:
+                self.performances = {
+                    "training_metrics" : self.trainModelWithKFold(scores=scores, k=k, stratified=True, preffix="test_")
+                }
+            
+            self.trainModel()
+            self.performances.update({
+                "validation_metrics": self.evalModel(
+                    y_true=self.y_test,
+                    y_pred=self.makePredictionsWithModel(self.X_test),
+                    type_model="regx")
+            })
+         

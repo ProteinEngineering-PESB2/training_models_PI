@@ -615,12 +615,39 @@ class ClassificationModels(PredictiveModel):
     def processModel(
             self,
             averge="weighted",
-            normalized_cm="true"):
+            normalized_cm="true",
+            k=10,
+            kfold=False,
+            stratified=False,
+            scores=['f1_weighted', 'recall_weighted', 'precision_weighted', 'accuracy']):
 
         self.splitDataset()
-        self.trainModel()
-        self.performances = self.evalModel(
-            y_true=self.y_test,
-            y_pred=self.makePredictionsWithModel(self.X_test),
-            averge=averge, 
-            normalized_cm=normalized_cm)
+
+        if kfold == False and stratified == False:
+            self.trainModel()
+            self.performances = {
+                "validation_metrics": self.evalModel(
+                    y_true=self.y_test,
+                    y_pred=self.makePredictionsWithModel(self.X_test),
+                    averge=averge, 
+                    normalized_cm=normalized_cm)
+            }
+        
+        else:
+            if kfold:
+                self.performances = {
+                    "training_metrics" :  self.trainModelWithKFold(scores=scores, k=k, preffix="test_")
+                }
+            else:
+                self.performances = {
+                    "training_metrics" : self.trainModelWithKFold(scores=scores, k=k, stratified=True, preffix="test_")
+                }
+            
+            self.trainModel()
+            self.performances.update({
+                "validation_metrics": self.evalModel(
+                    y_true=self.y_test,
+                    y_pred=self.makePredictionsWithModel(self.X_test),
+                    averge=averge, 
+                    normalized_cm=normalized_cm)
+            })

@@ -5,6 +5,7 @@ from sklearn.metrics import (accuracy_score, precision_score, recall_score,
 # regression metrics
 from sklearn.metrics import (r2_score, mean_absolute_error, mean_squared_error)
 import pandas as pd
+import numpy as np
 
 def calculateClassificationMetrics(
         y_true=None, 
@@ -22,6 +23,19 @@ def calculateClassificationMetrics(
         "Confusion Matrix" : confusion_matrix(y_true=y_true, y_pred=y_pred, normalize=normalized_cm).tolist()
     }
 
+    return dict_metrics
+
+def calculateMetricsKFold(
+        trained_metrics, 
+        scoring_list,
+        preffix=""):
+    
+    dict_metrics = {}
+
+    for score in scoring_list:
+        dict_metrics.update({
+            score: np.mean(trained_metrics[f"{preffix}{score}"])
+        })
     return dict_metrics
 
 def calculateRegressionMetrics(

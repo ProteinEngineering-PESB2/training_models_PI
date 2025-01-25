@@ -38,11 +38,28 @@ class PredictiveModel(object):
 
         self.model.fit(self.X_train, self.y_train)
     
-    def trainModelWithKFold(self, k=10):
-        pass
+    def trainModelWithKFold(self, k=10, scores=[], stratified=False, preffix=""):
 
-    def trainModelWithStratified(self, k=10):
-        pass
+        if stratified == False:
+            response_cv = cross_validate(
+                self.model, 
+                self.X_train, 
+                self.y_train, 
+                cv=k, 
+                scoring=scores)
+        else:
+            cv = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
+            
+            response_cv = cross_validate(
+                self.model, 
+                self.X_train, 
+                self.y_train, 
+                cv=cv, 
+                scoring=scores)
+        
+        self.model.fit(self.X_train, self.y_train)
+        
+        return calculateMetricsKFold(response_cv, scoring_list=scores, preffix=preffix)
 
     def evalModel(
             self,
