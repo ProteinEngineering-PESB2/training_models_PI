@@ -22,9 +22,37 @@ This repository has two demonstrative datasets:
 
 ## Source code and implementation strategies
 
+The source code is implemented using modules. The folder [src](src/) contain all the source code associated with the use of the developed strategies. Currently, the following methods are available:
+
+- Embedding extraction
+- Encoder methods
+- Feature description
+- Training models
+
+The utils module facilitates the implementation of misc tasks.
+
+## Working with the library
+
+Before to start, please clone this repository, access to cloned repo and use the environment file to produce prepare the environment. Please, use the following command line:
+
+```
+conda env create -f environment.yml
+```
 ## Examples
+
+In the folder [notebooks](notebooks/) you will find different notebooks to demonstrate how to use the library. Moreover, in the folder [testing](testing/) you will find different scripts to run the embedding extraction. In this case, only the last layer of the embedding is processed.
+
+Usually, different pipelines can be applied concerning the task. For example:
+
+1. You can process your data, apply embedding extraction, and then see the generated data with dimensionality reduction approaches. At the same time, you can use the embedding to train ML models.
+
+2. With feature-engineering, you can make some statisticall analysis of the processed data to compare to groups based on feature-distributions.
+
+3. With the encoder and embedding-extraction methods, you can apply some clustering strategies (Coming soon)
 
 ## Coming soon
 
+- Runing scripts
+- Clustering strategies
 - Fine tuning for regression models
 - Alternative strategies to develop predictive models
