@@ -1,5 +1,6 @@
 from modlamp.descriptors import GlobalDescriptor
 
+
 def get_mw(sequence):
     """Molecular Weight"""
     try:
@@ -8,6 +9,7 @@ def get_mw(sequence):
         return round(desc.descriptor[0][0], 4)
     except:
         return None
+
 
 def get_isoelectric_point(sequence):
     """Isoelectric point"""
@@ -18,6 +20,7 @@ def get_isoelectric_point(sequence):
     except:
         return None
 
+
 def get_charge_density(sequence):
     """Charge density"""
     try:
@@ -26,6 +29,7 @@ def get_charge_density(sequence):
         return round(desc.descriptor[0][0], 5)
     except:
         return None
+
 
 def get_charge(sequence):
     """Charge"""
@@ -36,6 +40,7 @@ def get_charge(sequence):
     except:
         return None
 
+
 def get_instability_index(sequence):
     """Instability index"""
     try:
@@ -44,6 +49,7 @@ def get_instability_index(sequence):
         return round(desc.descriptor[0][0], 4)
     except:
         return None
+
 
 def get_aromaticity(sequence):
     """Aromaticity"""
@@ -54,6 +60,7 @@ def get_aromaticity(sequence):
     except:
         return None
 
+
 def get_aliphatic_index(sequence):
     """Aliphatic index"""
     try:
@@ -62,6 +69,7 @@ def get_aliphatic_index(sequence):
         return round(desc.descriptor[0][0], 4)
     except:
         return None
+
 
 def get_boman_index(sequence):
     """Boman index"""
@@ -72,6 +80,7 @@ def get_boman_index(sequence):
     except:
         return None
 
+
 def get_hydrophobic_ratio(sequence):
     """Hydrophobic ratio"""
     try:
@@ -81,5 +90,6 @@ def get_hydrophobic_ratio(sequence):
     except:
         return None
 
+
 def get_frequency_residue(sequence, residue):
-    return round(sequence.count(residue)/len(sequence), ndigits=4)
+    return round(sequence.count(residue) / len(sequence), ndigits=4)

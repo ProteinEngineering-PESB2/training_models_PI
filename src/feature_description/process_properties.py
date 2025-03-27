@@ -1,13 +1,20 @@
-from feature_description.calculate_properties import *
-from utils.constant import *
+from feature_description.calculate_properties import (
+    get_aliphatic_index,
+    get_aromaticity,
+    get_boman_index,
+    get_charge,
+    get_charge_density,
+    get_frequency_residue,
+    get_hydrophobic_ratio,
+    get_instability_index,
+    get_isoelectric_point,
+    get_mw,
+)
+from utils.constants import LIST_RESIDUES
+
 
 class ProteinDescriptors(object):
-
-    def __init__(
-            self,
-            dataset=None,
-            column_seq=None) -> None:
-        
+    def __init__(self, dataset=None, column_seq=None) -> None:
         self.dataset = dataset
         self.column_seq = column_seq
 
@@ -15,10 +22,7 @@ class ProteinDescriptors(object):
         self.message = ""
 
     def apply_physicochemical_properties(self):
-
-        self.dataset["Molecular Weight"] = self.dataset[self.column_seq].apply(
-            lambda x: get_mw(x)
-        )
+        self.dataset["Molecular Weight"] = self.dataset[self.column_seq].apply(lambda x: get_mw(x))
 
         self.dataset["Isoelectric point"] = self.dataset[self.column_seq].apply(
             lambda x: get_isoelectric_point(x)
@@ -28,9 +32,7 @@ class ProteinDescriptors(object):
             lambda x: get_charge_density(x)
         )
 
-        self.dataset["Charge"] = self.dataset[self.column_seq].apply(
-            lambda x: get_charge(x)
-        )
+        self.dataset["Charge"] = self.dataset[self.column_seq].apply(lambda x: get_charge(x))
 
         self.dataset["Instability index"] = self.dataset[self.column_seq].apply(
             lambda x: get_instability_index(x)
@@ -53,11 +55,8 @@ class ProteinDescriptors(object):
         )
 
         for residue in LIST_RESIDUES:
-
             name_col = f"freq_{residue}"
 
             self.dataset[name_col] = self.dataset[self.column_seq].apply(
-                lambda x : get_frequency_residue(x, residue)
+                lambda x: get_frequency_residue(x, residue)
             )
-
-    

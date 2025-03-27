@@ -1,16 +1,12 @@
-import pandas as pd
-import math 
-from scipy.fft import fft
+import math
+
 import numpy as np
+import pandas as pd
+from scipy.fft import fft
+
 
 class FFTEncoder(object):
-
-    def __init__(
-            self, 
-            dataset=None, 
-            sequence_column=None, 
-            ignore_columns=[]) -> None:
-        
+    def __init__(self, dataset=None, sequence_column=None, ignore_columns=[]) -> None:
         self.dataset = dataset
         self.sequence_column = sequence_column
         self.ignore_columns = ignore_columns
@@ -20,15 +16,13 @@ class FFTEncoder(object):
         self.df_fft = None
 
     def __processing_data_to_fft(self):
-
         print("Removing columns data")
-        
-        if len(self.ignore_columns) >0:
+
+        if len(self.ignore_columns) > 0:
             self.data_ignored = self.dataset[self.ignore_columns]
             self.dataset = self.dataset.drop(columns=self.ignore_columns)
-    
-    def __get_near_pow(self):
 
+    def __get_near_pow(self):
         print("Get near pow 2 value")
         list_data = [math.pow(2, i) for i in range(1, 20)]
         stop_value = list_data[0]
@@ -41,7 +35,6 @@ class FFTEncoder(object):
         self.stop_value = int(stop_value)
 
     def __complete_zero_padding(self):
-
         print("Apply zero padding")
         list_df = [self.dataset]
         for i in range(self.max_length, self.stop_value):
@@ -52,7 +45,6 @@ class FFTEncoder(object):
             list_df.append(df_tmp)
 
         self.dataset = pd.concat(list_df, axis=1)
-    
 
     def init_process(self):
         self.__processing_data_to_fft()
@@ -60,32 +52,28 @@ class FFTEncoder(object):
         self.__complete_zero_padding()
 
     def __create_row(self, index):
-        row =  self.dataset.iloc[index].tolist()
+        row = self.dataset.iloc[index].tolist()
         return row
-    
-    def __apply_FFT(self, index):
 
+    def __apply_fft(self, index):
         row = self.__create_row(index)
         T = 1.0 / float(self.stop_value)
         yf = fft(row)
 
         xf = np.linspace(0.0, 1.0 / (2.0 * T), self.stop_value // 2)
-        yf = np.abs(yf[0:self.stop_value // 2])
+        yf = np.abs(yf[0 : self.stop_value // 2])
         return [value for value in yf]
 
-
     def encoding_dataset(self):
-
         matrix_response = []
         for index in self.dataset.index:
-            row_fft = self.__apply_FFT(index)
+            row_fft = self.__apply_fft(index)
             matrix_response.append(row_fft)
 
         print("Creating dataset")
-        header = ['p_{}'.format(i) for i in range(len(matrix_response[0]))]
+        header = ["p_{}".format(i) for i in range(len(matrix_response[0]))]
         print("Export dataset")
         self.df_fft = pd.DataFrame(matrix_response, columns=header)
-        
-        if len(self.ignore_columns)>0:
 
+        if len(self.ignore_columns) > 0:
             self.df_fft = pd.concat([self.df_fft, self.data_ignored], axis=1)
