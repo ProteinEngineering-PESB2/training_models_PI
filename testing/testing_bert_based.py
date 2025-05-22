@@ -7,7 +7,7 @@ import pandas as pd
 from embedding_extraction.bert_based import BertBasedMebedding
 
 df_data = pd.read_csv(
-    "/home/dmedina/Desktop/tutorials/training_models_PI/raw_data/Antimicrobial/train_data.csv"
+    "../raw_data/Antimicrobial/train_data.csv"
 )
 df_data = df_data[:100]
 
