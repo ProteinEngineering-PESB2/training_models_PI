@@ -26,7 +26,7 @@ print("Loading model/tokenizer")
 ankh2_based.load_model_tokenizer()
 
 print("Generating embedding")
-df_embedding = ankh2_based.embedding_process(batch_size=50)
+df_embedding = ankh2_based.embedding_process(batch_size=5)
 
 print(df_embedding)
 

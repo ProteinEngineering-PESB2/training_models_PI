@@ -28,7 +28,7 @@ print("Loading model/tokenizer")
 prot5_based.load_model_tokenizer()
 
 print("Generating embedding")
-df_embedding = prot5_based.embedding_process(batch_size=50)
+df_embedding = prot5_based.embedding_process(batch_size=5)
 
 print(df_embedding)
 

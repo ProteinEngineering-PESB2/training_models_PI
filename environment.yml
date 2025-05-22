@@ -1,4 +1,4 @@
-name: protein_engineering
+name: training_models_pi
 channels:
   - pytorch
   - bioconda
